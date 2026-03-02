@@ -36,6 +36,8 @@ class LaneExternalIterator(object):
                 cache_path = os.path.join(path, 'tusimple_anno_cache.json')
             elif dataset_name == 'CurveLanes':
                 cache_path = os.path.join(path, 'train', 'curvelanes_anno_cache.json')
+            elif dataset_name == 'custom':
+                cache_path = os.path.join(path, 'custom_anno_cache.json')
             else:
                 raise NotImplementedError
 
@@ -221,6 +223,9 @@ class TrainCollect:
         elif dataset_name == 'CurveLanes':
             self.original_image_width = 2560
             self.original_image_height = 1440
+        elif dataset_name == 'custom':
+            self.original_image_width = 1920
+            self.original_image_height = 1080
 
         if dataset_name == 'CurveLanes':
             pipe = ExternalSourceTrainPipeline(batch_size, num_threads, shard_id, eii, train_width, train_height,top_crop, normalize_image_scale = True, nscale_w = 2560, nscale_h = 1440)

@@ -6,7 +6,7 @@ from model.seg_model import SegHead
 from model.layer import CoordConv
 
 class parsingNet(torch.nn.Module):
-    def __init__(self, pretrained=True, backbone='50', num_grid_row = None, num_cls_row = None, num_grid_col = None, num_cls_col = None, num_lane_on_row = None, num_lane_on_col = None, use_aux=False,input_height = None, input_width = None, fc_norm = False):
+    def __init__(self, pretrained=True, backbone='50', num_grid_row = None, num_cls_row = None, num_grid_col = None, num_cls_col = None, num_lane_on_row = None, num_lane_on_col = None, use_aux=False,input_height = None, input_width = None, fc_norm = False, num_classes = 8):
         super(parsingNet, self).__init__()
         self.num_grid_row = num_grid_row
         self.num_cls_row = num_cls_row
@@ -14,6 +14,7 @@ class parsingNet(torch.nn.Module):
         self.num_cls_col = num_cls_col
         self.num_lane_on_row = num_lane_on_row
         self.num_lane_on_col = num_lane_on_col
+        self.num_classes = num_classes
         self.use_aux = use_aux
         self.dim1 = self.num_grid_row * self.num_cls_row * self.num_lane_on_row
         self.dim2 = self.num_grid_col * self.num_cls_col * self.num_lane_on_col
@@ -97,4 +98,4 @@ class parsingNet(torch.nn.Module):
                 'exist_col': out[:,-self.dim4:].view(-1, 2, self.num_cls_col, self.num_lane_on_col)}
 
 def get_model(cfg):
-    return parsingNet(pretrained = True, backbone=cfg.backbone, num_grid_row = cfg.num_cell_row, num_cls_row = cfg.num_row, num_grid_col = cfg.num_cell_col, num_cls_col = cfg.num_col, num_lane_on_row = cfg.num_lanes, num_lane_on_col = cfg.num_lanes, use_aux = cfg.use_aux, input_height = cfg.train_height, input_width = cfg.train_width, fc_norm = cfg.fc_norm).cuda()
+    return parsingNet(pretrained = True, backbone=cfg.backbone, num_grid_row = cfg.num_cell_row, num_cls_row = cfg.num_row, num_grid_col = cfg.num_cell_col, num_cls_col = cfg.num_col, num_lane_on_row = cfg.num_lanes, num_lane_on_col = cfg.num_lanes, use_aux = cfg.use_aux, input_height = cfg.train_height, input_width = cfg.train_width, fc_norm = cfg.fc_norm, num_classes = cfg.num_classes).cuda()

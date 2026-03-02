@@ -35,3 +35,4 @@ num_cell_col= 100
 mean_loss_w= 0.05
 fc_norm= True
 crop_ratio = 0.6
+num_classes= 8

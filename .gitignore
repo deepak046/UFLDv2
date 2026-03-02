@@ -10,3 +10,7 @@ evaluate
 **/dist
 **/*egg-info
 *.lprof
+*.avi
+*.mp4
+
+dataset/

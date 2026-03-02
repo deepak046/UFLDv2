@@ -35,7 +35,7 @@ def get_loss_dict(cfg):
             ('cls_out_ext', 'cls_out_ext_label'), ('cls_out_col_ext', 'cls_out_col_ext_label') , ('cls_out', 'cls_label'),('cls_out_col', 'cls_label_col'),('cls_out', 'cls_label'),('cls_out_col', 'cls_label_col'), ('seg_out_row', 'seg_label'), ('seg_out_col', 'seg_label')
             ],
         }
-    elif cfg.dataset in ['Tusimple', 'CULane']:
+    elif cfg.dataset in ['Tusimple', 'CULane', 'custom']:
         loss_dict = {
             'name': ['cls_loss', 'relation_loss', 'relation_dis','cls_loss_col','cls_ext','cls_ext_col', 'mean_loss_row', 'mean_loss_col'],
             'op': [SoftmaxFocalLoss(2, ignore_lb=-1), ParsingRelationLoss(), ParsingRelationDis(), SoftmaxFocalLoss(2, ignore_lb=-1), torch.nn.CrossEntropyLoss(),  torch.nn.CrossEntropyLoss(), MeanLoss(), MeanLoss(),],

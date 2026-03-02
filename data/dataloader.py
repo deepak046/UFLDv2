@@ -79,6 +79,13 @@ def get_test_loader(batch_size, data_root,dataset, distributed, crop_ratio, trai
             transforms.Normalize((0.485, 0.456, 0.406), (0.229, 0.224, 0.225)),
         ])
         test_dataset = LaneTestDataset(data_root,os.path.join(data_root, 'valid/valid_for_culane_style.txt'),img_transform = img_transforms, crop_size=train_height)
+    elif dataset == 'custom':
+        img_transforms = transforms.Compose([
+            transforms.Resize((int(train_height / crop_ratio), train_width)),
+            transforms.ToTensor(),
+            transforms.Normalize((0.485, 0.456, 0.406), (0.229, 0.224, 0.225)),
+        ])
+        test_dataset = LaneTestDataset(data_root, os.path.join(data_root, 'test.txt'), img_transform=img_transforms, crop_size=train_height)
     else:
         raise NotImplementedError
     if distributed:
