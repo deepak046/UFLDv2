@@ -1,6 +1,6 @@
 dataset = 'custom'
 data_root = '/home/new_user/Desktop/shared-data/Line/Training/Train_Lane_Detection/sample/ufld'  # Set to the output directory of convert_labelme_to_ufld.py
-epoch = 150
+epoch = 500
 batch_size = 16
 optimizer = 'SGD'
 learning_rate = 0.05

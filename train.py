@@ -114,6 +114,7 @@ if __name__ == "__main__":
     res = None
     for epoch in range(resume_epoch, cfg.epoch):
 
+        print(f"Training Epoch: {epoch}")
         train(net, train_loader, loss_dict, optimizer, scheduler,logger, epoch, metric_dict, cfg.dataset)
         train_loader.reset()
 
