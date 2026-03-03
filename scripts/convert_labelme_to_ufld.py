@@ -461,11 +461,11 @@ def main():
 
     for session in sessions:
         session_path = os.path.join(args.input_dir, session)
-        json_dir = os.path.join(session_path, "labels_json")
+        json_dir = os.path.join(session_path, "labels") # or labels_json
         images_dir = os.path.join(session_path, "images")
 
         if not os.path.isdir(json_dir) or not os.path.isdir(images_dir):
-            print(f"Skipping {session}: missing labels_json or images folder")
+            print(f"Skipping {session}: missing labels or images folder")
             continue
 
         json_files = sorted(glob.glob(os.path.join(json_dir, "*.json")))

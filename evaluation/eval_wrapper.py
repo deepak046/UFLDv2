@@ -954,7 +954,29 @@ def eval_lane(net, cfg, ep = None, logger = None):
                     return r['value']
         else:
             return None
-
+    elif cfg.dataset == 'custom':
+        exp_name = 'custom_eval_tmp'
+        run_test_tusimple(net, cfg.data_root, cfg.test_work_dir, exp_name, cfg.distributed, cfg.crop_ratio, cfg.train_width, cfg.train_height, row_anchor = cfg.row_anchor, col_anchor = cfg.col_anchor)
+        synchronize()  # wait for all results
+        if is_main_process():
+            combine_tusimple_test(cfg.test_work_dir, exp_name)
+            gt_label = getattr(cfg, "test_label", "test_label.json")
+            res = LaneEval.bench_one_submit(
+                os.path.join(cfg.test_work_dir, exp_name + ".txt"),
+                os.path.join(cfg.data_root, gt_label),
+            )
+            res = json.loads(res)
+            for r in res:
+                dist_print(r["name"], r["value"])
+                if logger is not None:
+                    logger.add_scalar("CustomEval/" + r["name"], r["value"], global_step=ep)
+        synchronize()
+        if is_main_process():
+            for r in res:
+                if r["name"] == "F1":
+                    return r["value"]
+        else:
+            return None
 
 def read_helper(path):
     lines = open(path, 'r').readlines()[1:]

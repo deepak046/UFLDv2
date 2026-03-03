@@ -22,7 +22,7 @@
 
     pip install -r requirements.txt
 
-    pip install --extra-index-url https://developer.download.nvidia.com/compute/redist --upgrade nvidia-dali-cuda110
+    pip install --extra-index-url https://developer.download.nvidia.com/compute/redist --upgrade nvidia-dali-cuda120
     # Install Nvidia DALI (Very fast data loading lib))
 
     cd my_interp

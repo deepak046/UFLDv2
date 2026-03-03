@@ -5,7 +5,7 @@ from utils.dist_utils import dist_print, dist_tqdm, synchronize
 from utils.factory import get_metric_dict, get_loss_dict, get_optimizer, get_scheduler
 from utils.metrics import update_metrics, reset_metrics
 
-from utils.common import calc_loss, get_model, get_train_loader, inference, merge_config, save_model, cp_projects
+from utils.common import calc_loss, get_model, get_train_loader, inference, merge_config, save_model, save_final_model,cp_projects
 from utils.common import get_work_dir, get_logger
 
 import time
@@ -117,11 +117,14 @@ if __name__ == "__main__":
         train(net, train_loader, loss_dict, optimizer, scheduler,logger, epoch, metric_dict, cfg.dataset)
         train_loader.reset()
 
-        res = eval_lane(net, cfg, ep = epoch, logger = logger)
+        # res = eval_lane(net, cfg, ep = epoch, logger = logger)
 
         if res is not None and res > max_res:
             max_res = res
             save_model(net, optimizer, epoch, work_dir, distributed)
         logger.add_scalar('CuEval/X',max_res,global_step = epoch)
+
+    # Save the final model also
+    save_final_model(net, optimizer, epoch, work_dir, distributed)
 
     logger.close()
