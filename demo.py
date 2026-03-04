@@ -117,7 +117,7 @@ if __name__ == "__main__":
             )
             for split in splits
         ]
-        img_w, img_h = 2560, 1440
+        img_w, img_h = 2560, 1440 # 1920, 1080
     else:
         raise NotImplementedError
     for split, dataset in zip(splits, datasets):

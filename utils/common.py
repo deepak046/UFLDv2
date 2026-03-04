@@ -150,8 +150,8 @@ def cp_projects(auto_backup, to_path):
 import datetime, os
 def get_work_dir(cfg):
     now = datetime.datetime.now().strftime('%Y%m%d_%H%M%S')
-    hyper_param_str = '_lr_%1.0e_b_%d' % (cfg.learning_rate, cfg.batch_size)
-    work_dir = os.path.join(cfg.log_path, now + hyper_param_str + cfg.note)
+    hyper_param_str = '_lr_%1.0e_ep_%d' % (cfg.learning_rate, cfg.epoch)
+    work_dir = os.path.join(cfg.log_path, cfg.note + '_' + now + hyper_param_str)
     return work_dir
 
 def get_logger(work_dir, cfg):

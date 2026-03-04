@@ -18,6 +18,7 @@ def train(net, data_loader, loss_dict, optimizer, scheduler,logger, epoch, metri
         global_step = epoch * len(data_loader) + b_idx
 
         results = inference(net, data_label, dataset)
+        # if b_idx == 0: 
 
         loss = calc_loss(loss_dict, results, logger, global_step, epoch)
         optimizer.zero_grad()

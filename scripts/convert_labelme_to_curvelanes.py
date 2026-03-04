@@ -473,7 +473,7 @@ def process_split_sessions(input_dir, output_dir, split_name, sessions, row_anch
 
     for session in sessions:
         session_path = os.path.join(input_dir, session)
-        json_dir = os.path.join(session_path, "labels_json")
+        json_dir = os.path.join(session_path, "labels")
         images_dir = os.path.join(session_path, "images")
 
         if not os.path.isdir(json_dir) or not os.path.isdir(images_dir):
@@ -550,19 +550,23 @@ def write_split_files(output_dir, split_name, entries):
     # Requested split image lists
     list_filename = "train.txt" if split_name == "train" else f"{split_name}.txt"
 
-    if split_name == "train" or split_name == "valid":
+    if split_name == "train":
         with open(os.path.join(split_root, list_filename), "w") as f:
             for entry in entries:
                 f.write(f"{entry['split_img_rel']} \n")
+    elif split_name == "valid":
+        with open(os.path.join(split_root, list_filename), "w") as f:
+            for entry in entries:
+                f.write(f"{entry['img_rel']} \n")
     else:
         with open(os.path.join(split_root, list_filename), "w") as f:
             for entry in entries:
-                f.write(f"{entry['split_img_rel']} \n")
+                f.write(f"{entry['img_rel']} \n")
 
 def main():
     parser = argparse.ArgumentParser(description="Convert LabelMe annotations to UFLDv2 format")
     parser.add_argument("--input-dir", required=True,
-                        help="Root directory containing session folders (each with images/ and labels_json/)")
+                        help="Root directory containing session folders (each with images/ and labels/)")
     parser.add_argument("--output-dir", required=True,
                         help="Output directory for UFLDv2-formatted data")
     parser.add_argument("--num-lanes", type=int, default=6)
@@ -603,7 +607,7 @@ def main():
         d for d in os.listdir(args.input_dir)
         if os.path.isdir(os.path.join(args.input_dir, d))
            and os.path.isdir(os.path.join(args.input_dir, d, "images"))
-           and os.path.isdir(os.path.join(args.input_dir, d, "labels_json"))
+           and os.path.isdir(os.path.join(args.input_dir, d, "labels"))
     ])
 
     train_sessions, valid_sessions, test_sessions = split_sessions_by_ratio(

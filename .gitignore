@@ -16,3 +16,4 @@ evaluate
 dataset/
 venv/
 2026*/
+models/*

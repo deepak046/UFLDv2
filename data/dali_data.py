@@ -221,14 +221,14 @@ class TrainCollect:
             self.original_image_width = 1280
             self.original_image_height = 720
         elif dataset_name == 'CurveLanes':
-            self.original_image_width = 2560
-            self.original_image_height = 1440
+            self.original_image_width = 2560 # 2560
+            self.original_image_height = 1440 # 1440
         elif dataset_name == 'custom':
             self.original_image_width = 1920
             self.original_image_height = 1080
 
         if dataset_name == 'CurveLanes':
-            pipe = ExternalSourceTrainPipeline(batch_size, num_threads, shard_id, eii, train_width, train_height,top_crop, normalize_image_scale = True, nscale_w = 2560, nscale_h = 1440)
+            pipe = ExternalSourceTrainPipeline(batch_size, num_threads, shard_id, eii, train_width, train_height,top_crop, normalize_image_scale = True, nscale_w = 2560, nscale_h = 1440) # 2560, 1440
         else:
             pipe = ExternalSourceTrainPipeline(batch_size, num_threads, shard_id, eii, train_width, train_height,top_crop)
         self.pii = DALIGenericIterator(pipe, output_map = ['images', 'seg_images', 'points'], last_batch_padded=True, last_batch_policy=LastBatchPolicy.PARTIAL)

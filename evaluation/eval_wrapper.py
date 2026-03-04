@@ -104,8 +104,8 @@ def generate_lines_local(dataset, out, out_ext, names, output_path, mode='normal
                                 out_tmp = out_tmp / (out.shape[1]-1) * 1640
                                 fp.write('%.3f %.3f '% ( out_tmp , row_anchor[k] * 590))
                             elif dataset == 'CurveLanes':
-                                out_tmp = out_tmp / (out.shape[1]-1) * 2560
-                                fp.write('%.3f %.3f '% ( out_tmp , row_anchor[k] * 1440))
+                                out_tmp = out_tmp / (out.shape[1]-1) * 2560 # 1920
+                                fp.write('%.3f %.3f '% ( out_tmp , row_anchor[k] * 1440)) # 1080
                             else:
                                 raise Exception
                     fp.write('\n')
@@ -149,8 +149,8 @@ def generate_lines_col_local(dataset, out_col,out_col_ext, names, output_path, m
                                 out_tmp = out_tmp / (out_col.shape[1]-1) * 590
                                 fp.write('%.3f %.3f '% ( col_anchor[k] * 1640, out_tmp ))
                             elif dataset == 'CurveLanes':
-                                out_tmp = out_tmp / (out_col.shape[1]-1) * 1440
-                                fp.write('%.3f %.3f '% ( col_anchor[k] * 2560, out_tmp ))
+                                out_tmp = out_tmp / (out_col.shape[1]-1) * 1440 # 1440
+                                fp.write('%.3f %.3f '% ( col_anchor[k] * 2560, out_tmp )) # 2560
                             else:
                                 raise Exception
 
@@ -198,8 +198,8 @@ def generate_lines_local_curve_combine(dataset, out, out_ext, names, output_path
                                 out_tmp = out_tmp / (out.shape[1]-1) * 1640
                                 fp.write('%.3f %.3f '% ( out_tmp , row_anchor[k] * 590))
                             elif dataset == 'CurveLanes':
-                                out_tmp = out_tmp / (out.shape[1]-1) * 2560
-                                fp.write('%.3f %.3f '% ( out_tmp , row_anchor[k] * 1440))
+                                out_tmp = out_tmp / (out.shape[1]-1) * 2560 # 2560
+                                fp.write('%.3f %.3f '% ( out_tmp , row_anchor[k] * 1440)) # 1440
                             else:
                                 raise Exception
                     fp.write('\n')
@@ -244,8 +244,8 @@ def generate_lines_col_local_curve_combine(dataset, out_col,out_col_ext, names, 
                                 out_tmp = out_tmp / (out_col.shape[1]-1) * 590
                                 fp.write('%.3f %.3f '% ( col_anchor[k] * 1640, out_tmp ))
                             elif dataset == 'CurveLanes':
-                                out_tmp = out_tmp / (out_col.shape[1]-1) * 1440
-                                fp.write('%.3f %.3f '% ( col_anchor[k] * 2560, out_tmp ))
+                                out_tmp = out_tmp / (out_col.shape[1]-1) * 1440 # 1440
+                                fp.write('%.3f %.3f '% ( col_anchor[k] * 2560, out_tmp )) # 2560
                             else:
                                 raise Exception
 
@@ -1061,8 +1061,8 @@ def call_curvelane_eval(data_dir, exp_name,output_path):
     iou=0.5  # Set iou to 0.3 or 0.5
     im_w=224
     im_h=224
-    x_factor = 224 / 2560
-    y_factor = 224 / 1440
+    x_factor = 224 / 2560 # 2560
+    y_factor = 224 / 1440 # 1440
     frame=1
     list0 = os.path.join(data_dir, 'valid', 'valid_for_culane_style.txt')
     if not os.path.exists(os.path.join(output_path,'txt')):
@@ -1076,5 +1076,5 @@ def call_curvelane_eval(data_dir, exp_name,output_path):
     print('./evaluate -s -a %s -d %s -i %s -l %s -w %s -t %s -c %s -r %s -f %s -o %s -x %s -y %s'%(data_dir,detect_dir,data_dir,list0,w_lane,iou,im_w,im_h,frame,out0, x_factor, y_factor))
     os.system('%s -a %s -d %s -i %s -l %s -w %s -t %s -c %s -r %s -f %s -o %s -x %s -y %s'%(eval_cmd,data_dir,detect_dir,data_dir,list0,w_lane,iou,im_w,im_h,frame,out0, x_factor, y_factor))
     res_all = {}
-    # res_all['res_curve'] = read_helper(out0)
+    res_all['res_curve'] = read_helper(out0)
     return res_all

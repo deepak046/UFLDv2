@@ -142,8 +142,8 @@ def generate_segmentation_and_train_list(root, split_name, line_txt, names, file
         all_points[:,:,1] = np.tile(the_anno_row_anchor, (10,1))
         all_points[:,:,0] = -99999
 
-        rw = 2560 / width
-        rh = 1440 / height
+        rw = 2560 / width # 2560
+        rh = 1080 / height # 1440
         for idx in range(len(k_neg))[:5]:
             which_lane = np.where(ks == k_neg[idx])[0][0]
             draw(label,lines[which_lane],5-idx)
@@ -160,12 +160,13 @@ def generate_segmentation_and_train_list(root, split_name, line_txt, names, file
         if split_name == 'train':
             cache_dict['train/'+names[i]] = all_points.tolist()
         elif split_name == 'valid':
-            cache_dict['valid/'+names[i]] = all_points.tolist()
+            cache_dict[names[i]] = all_points.tolist()
 
         if split_name == 'train':
             split_gt_fp.write('train/'+names[i] + ' ' + 'train/' +label_path + ' '+' '.join(list(map(str,bin_label))) + '\n')
         elif split_name == 'valid':
-            split_gt_fp.write('valid/'+names[i] + ' ' + 'valid/' +label_path + ' '+' '.join(list(map(str,bin_label))) + '\n')
+            split_gt_fp.write(names[i] + ' ' + label_path + ' '+' '.join(list(map(str,bin_label))) + '\n')
+
     split_gt_fp.close()
     with open(os.path.join(root, json_name), 'w') as f:
         json.dump(cache_dict, f)
