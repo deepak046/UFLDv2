@@ -37,7 +37,7 @@ class LaneExternalIterator(object):
             elif dataset_name == 'CurveLanes':
                 cache_path = os.path.join(path, 'train', 'curvelanes_anno_cache.json')
             elif dataset_name == 'custom':
-                cache_path = os.path.join(path, 'custom_anno_cache.json')
+                cache_path = os.path.join(path, 'train', 'curvelanes_anno_cache.json')
             else:
                 raise NotImplementedError
 

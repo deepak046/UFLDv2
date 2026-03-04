@@ -506,10 +506,12 @@ def process_split_sessions(input_dir, output_dir, split_name, sessions, row_anch
 
             split_img_rel = f"{split_name}/images/{out_name}.jpg"
             split_label_rel = f"{split_name}/labels/{out_name}.lines.json"
-            split_seg_rel = f"{split_name}/segs/{out_name}.png"
-            local_img_rel = f"images/{out_name}.jpg"
-            local_label_rel = f"labels/{out_name}.lines.json"
-            local_seg_rel = f"segs/{out_name}.png"
+            img_rel = f"images/{out_name}.jpg"
+            label_rel = f"labels/{out_name}.lines.json"
+            # split_seg_rel = f"{split_name}/segs/{out_name}.png"
+            # local_img_rel = f"images/{out_name}.jpg"
+            # local_label_rel = f"labels/{out_name}.lines.json"
+            # local_seg_rel = f"segs/{out_name}.png"
 
             bin_label, seg_mask, points, slot_raw_pts, num_valid = process_one_image(
                 shapes, img_h, img_w, row_anchors
@@ -520,18 +522,20 @@ def process_split_sessions(input_dir, output_dir, split_name, sessions, row_anch
             cv2.imwrite(os.path.join(output_dir, split_img_rel), img)
             with open(os.path.join(output_dir, split_label_rel), "w") as f:
                 json.dump(lines_payload, f)
-            cv2.imwrite(os.path.join(output_dir, split_seg_rel), seg_mask)
+            # cv2.imwrite(os.path.join(output_dir, split_seg_rel), seg_mask)
 
             # debug_img = draw_debug_image(img, bin_label, points, row_anchors, slot_raw_pts)
             # cv2.imwrite(os.path.join(split_root, f"debug_vis/{out_name}.jpg"), debug_img)
 
             entries.append({
-                "img_rel": split_img_rel,
-                "label_rel": split_label_rel,
-                "seg_rel": split_seg_rel,
-                "img_local_rel": local_img_rel,
-                "label_local_rel": local_label_rel,
-                "seg_local_rel": local_seg_rel,
+                "img_rel": img_rel,
+                "label_rel": label_rel,
+                "split_img_rel": split_img_rel,
+                "split_label_rel": split_label_rel,
+                # "seg_rel": split_seg_rel,
+                # "img_local_rel": local_img_rel,
+                # "label_local_rel": local_label_rel,
+                # "seg_local_rel": local_seg_rel,
                 "bin_label": bin_label,
                 "points": points.tolist(),
                 "num_valid": num_valid,
@@ -543,42 +547,17 @@ def process_split_sessions(input_dir, output_dir, split_name, sessions, row_anch
 def write_split_files(output_dir, split_name, entries):
     split_root = os.path.join(output_dir, split_name)
 
-    if split_name == "train":
-        gt_filename = "train_gt.txt"
-    elif split_name == "valid":
-        gt_filename = "valid_gt.txt"
-    else:
-        gt_filename = "test.txt"
-
-    # with open(os.path.join(split_root, gt_filename), "w") as f:
-    #     for entry in entries:
-    #         flags = " ".join(map(str, entry["bin_label"]))
-    #         # Relative to dataset root:
-    #         # train/images/... train/segs/... flags...
-    #         f.write(f"{entry['img_rel']}\n")
-
     # Requested split image lists
     list_filename = "train.txt" if split_name == "train" else f"{split_name}.txt"
-    with open(os.path.join(split_root, list_filename), "w") as f:
-        for entry in entries:
-            f.write(f"{entry['img_local_rel']}\n")
 
-    # if split_name == "train":
-    #     # Keyed by the image path exactly as it appears in train_gt.txt.
-    #     train_cache = {entry["img_rel"]: entry["points"] for entry in entries}
-    #     with open(os.path.join(split_root, "curvelanes_anno_cache.json"), "w") as f:
-    #         json.dump(train_cache, f)
-
-    # if split_name == "valid":
-    #     with open(os.path.join(split_root, "valid_for_culane_style.txt"), "w") as f:
-    #         for entry in entries:
-    #             f.write(f"{entry['img_rel']}\n")
-
-    # if split_name == "test":
-    #     with open(os.path.join(split_root, "test.txt"), "w") as f:
-    #         for entry in entries:
-    #             f.write(f"{entry['img_rel']}\n")
-
+    if split_name == "train" or split_name == "valid":
+        with open(os.path.join(split_root, list_filename), "w") as f:
+            for entry in entries:
+                f.write(f"{entry['split_img_rel']} \n")
+    else:
+        with open(os.path.join(split_root, list_filename), "w") as f:
+            for entry in entries:
+                f.write(f"{entry['split_img_rel']} \n")
 
 def main():
     parser = argparse.ArgumentParser(description="Convert LabelMe annotations to UFLDv2 format")
@@ -688,7 +667,6 @@ def main():
     print(f"    valid/valid.txt")
     print(f"    valid/valid_for_culane_style.txt ({len(valid_entries)} entries)")
     print(f"    test/test.txt ({len(test_entries)} entries)")
-    print(f"    train|valid|test each contains images/, labels/, segs/, debug_vis/")
 
 
 if __name__ == "__main__":

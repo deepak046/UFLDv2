@@ -47,13 +47,13 @@ def generate_linestxt_on_curvelane_val():
         label_path = file.replace('images', 'labels')
         label_path = label_path.replace('.jpg', '.lines.json')
 
-        label_path = os.path.join(curvelane_val_root, label_path)
-        file_path = os.path.join(curvelane_val_root, file)
+        label_path = os.path.join(args.root, label_path)
+        file_path = os.path.join(args.root, file)
 
         width, height = imagesize.get(file_path)
 
         culane_style_label = read_label(label_path, x_factor = 2560 / width, y_factor = 1440 / height)
-        culane_style_label_store_path = os.path.join(curvelane_val_root, file).replace('jpg','lines.txt')
+        culane_style_label_store_path = os.path.join(args.root, file).replace('jpg','lines.txt')
         with open(culane_style_label_store_path, 'w') as f:
             for culane_style_label_i in culane_style_label:
                 f.write(' '.join(culane_style_label_i)+'\n')

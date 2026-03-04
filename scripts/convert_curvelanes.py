@@ -57,7 +57,8 @@ def draw(im, line, idx, ratio_height = 1, ratio_width = 1, show = False):
     if show:
         cv2.putText(im,str(idx),(int(line_x[len(line_x) // 2]),int(line_y[len(line_x) // 2]) - 20),cv2.FONT_HERSHEY_SIMPLEX, 1.0, (255, 255, 255), lineType=cv2.LINE_AA)
         idx = idx * 60
-        
+    else:
+        idx = idx * 60
     
     for i in range(len(line_x)-1):
         cv2.line(im,pt0,(int(line_x[i+1]),int(line_y[i+1])),(idx,),thickness = 16)
@@ -104,13 +105,13 @@ def get_curvelanes_list(root, label_dir):
     
     return names,line_txt
 
-def generate_segmentation_and_train_list(root, line_txt, names, file_name='train_gt.txt', json_name='curvelanes_anno_cache.json'):
+def generate_segmentation_and_train_list(root, split_name, line_txt, names, file_name='train_gt.txt', json_name='curvelanes_anno_cache.json'):
     """
     The lane annotations of the Tusimple dataset is not strictly in order, so we need to find out the correct lane order for segmentation.
     We use the same definition as CULane, in which the four lanes from left to right are represented as 1,2,3,4 in segentation label respectively.
     """
     assert os.path.exists(root)
-    train_gt_fp = open(os.path.join(root, file_name), 'w')
+    split_gt_fp = open(os.path.join(root, file_name), 'w')
     cache_dict = {}
     if not os.path.exists(os.path.join(root, 'segs')):
         os.mkdir(os.path.join(root, 'segs'))
@@ -156,10 +157,16 @@ def generate_segmentation_and_train_list(root, line_txt, names, file_name='train
             all_points[5+idx] = spline(np.array(lines[which_lane]), the_anno_row_anchor, ratio_height = rh, ratio_width = rw)
         
         cv2.imwrite(os.path.join(root,label_path),label)
-        cache_dict['train/'+names[i]] = all_points.tolist()
+        if split_name == 'train':
+            cache_dict['train/'+names[i]] = all_points.tolist()
+        elif split_name == 'valid':
+            cache_dict['valid/'+names[i]] = all_points.tolist()
 
-        train_gt_fp.write('train/'+names[i] + ' ' + 'train/' +label_path + ' '+' '.join(list(map(str,bin_label))) + '\n')
-    train_gt_fp.close()
+        if split_name == 'train':
+            split_gt_fp.write('train/'+names[i] + ' ' + 'train/' +label_path + ' '+' '.join(list(map(str,bin_label))) + '\n')
+        elif split_name == 'valid':
+            split_gt_fp.write('valid/'+names[i] + ' ' + 'valid/' +label_path + ' '+' '.join(list(map(str,bin_label))) + '\n')
+    split_gt_fp.close()
     with open(os.path.join(root, json_name), 'w') as f:
         json.dump(cache_dict, f)
 
@@ -175,9 +182,9 @@ if __name__ == "__main__":
 
     names, line_txt = get_curvelanes_list(args.root,  'train')
     # generate training list for training
-    generate_segmentation_and_train_list(os.path.join(args.root, 'train'), line_txt, names)
+    generate_segmentation_and_train_list(os.path.join(args.root, 'train'), 'train', line_txt, names)
 
 
     names, line_txt = get_curvelanes_list(args.root,  'valid')
-    generate_segmentation_and_train_list(os.path.join(args.root, 'valid'), line_txt, names, file_name='valid_gt.txt', json_name='culane_anno_cache_val.json')
+    generate_segmentation_and_train_list(os.path.join(args.root, 'valid'), 'valid', line_txt, names, file_name='valid_gt.txt', json_name='culane_anno_cache_val.json')
 
