@@ -136,7 +136,7 @@ def generate_segmentation_and_train_list(root, line_txt, names, file_name='train
         label = np.zeros((height,width),dtype=np.uint8)  
         bin_label = [0] * 10
 
-        all_points = np.zeros((10,125,2), dtype=np.float)
+        all_points = np.zeros((10,125,2), dtype=float)
         the_anno_row_anchor = np.array(list(range(200, 1450, 10)))
         all_points[:,:,1] = np.tile(the_anno_row_anchor, (10,1))
         all_points[:,:,0] = -99999
@@ -178,6 +178,6 @@ if __name__ == "__main__":
     generate_segmentation_and_train_list(os.path.join(args.root, 'train'), line_txt, names)
 
 
-    # names, line_txt = get_curvelanes_list(args.root,  'valid')
-    # generate_segmentation_and_train_list(os.path.join(args.root, 'valid'), line_txt, names, file_name='valid_gt.txt', json_name='culane_anno_cache_val.json')
+    names, line_txt = get_curvelanes_list(args.root,  'valid')
+    generate_segmentation_and_train_list(os.path.join(args.root, 'valid'), line_txt, names, file_name='valid_gt.txt', json_name='culane_anno_cache_val.json')
 
