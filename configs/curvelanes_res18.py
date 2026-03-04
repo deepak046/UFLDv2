@@ -1,5 +1,5 @@
 dataset='CurveLanes'
-data_root= '' # Need to be modified before running
+data_root= '/home/new_user/Desktop/shared-data/Line/Training/Train_Lane_Detection/sample_curvelane' # Need to be modified before running
 epoch=50
 batch_size=8
 optimizer='SGD'
@@ -16,7 +16,7 @@ backbone='18'
 sim_loss_w=1.0
 shp_loss_w=0.0
 note=''
-log_path=''
+log_path='/home/new_user/qtpie/lane_detection/UFLDv2/models/logs/sample_curvelane/'
 finetune=None
 resume=None
 test_model=''

@@ -70,6 +70,8 @@ if __name__ == "__main__":
         cls_num_per_lane = 56
     elif cfg.dataset == 'custom':
         cls_num_per_lane = 10
+    elif cfg.dataset == 'CurveLanes':
+        cls_num_per_lane = 10
     else:
         raise NotImplementedError
 
@@ -103,6 +105,19 @@ if __name__ == "__main__":
         splits = ['test.txt']
         datasets = [LaneTestDataset(cfg.data_root,os.path.join(cfg.data_root, split),img_transform = img_transforms, crop_size = cfg.train_height) for split in splits]
         img_w, img_h = 1920, 1080
+    elif cfg.dataset == 'CurveLanes':
+        # Use the same valid split list as in training/evaluation
+        splits = ['valid/valid_for_culane_style.txt']
+        datasets = [
+            LaneTestDataset(
+                cfg.data_root,
+                os.path.join(cfg.data_root, split),
+                img_transform=img_transforms,
+                crop_size=cfg.train_height,
+            )
+            for split in splits
+        ]
+        img_w, img_h = 2560, 1440
     else:
         raise NotImplementedError
     for split, dataset in zip(splits, datasets):

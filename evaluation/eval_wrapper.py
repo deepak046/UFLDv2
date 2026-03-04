@@ -1076,5 +1076,5 @@ def call_curvelane_eval(data_dir, exp_name,output_path):
     print('./evaluate -s -a %s -d %s -i %s -l %s -w %s -t %s -c %s -r %s -f %s -o %s -x %s -y %s'%(data_dir,detect_dir,data_dir,list0,w_lane,iou,im_w,im_h,frame,out0, x_factor, y_factor))
     os.system('%s -a %s -d %s -i %s -l %s -w %s -t %s -c %s -r %s -f %s -o %s -x %s -y %s'%(eval_cmd,data_dir,detect_dir,data_dir,list0,w_lane,iou,im_w,im_h,frame,out0, x_factor, y_factor))
     res_all = {}
-    res_all['res_curve'] = read_helper(out0)
+    # res_all['res_curve'] = read_helper(out0)
     return res_all

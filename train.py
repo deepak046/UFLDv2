@@ -114,11 +114,11 @@ if __name__ == "__main__":
     res = None
     for epoch in range(resume_epoch, cfg.epoch):
 
-        print(f"Training Epoch: {epoch}")
+        print(f"Training Epoch: {epoch + 1}")
         train(net, train_loader, loss_dict, optimizer, scheduler,logger, epoch, metric_dict, cfg.dataset)
         train_loader.reset()
 
-        # res = eval_lane(net, cfg, ep = epoch, logger = logger)
+        res = eval_lane(net, cfg, ep = epoch, logger = logger)
 
         if res is not None and res > max_res:
             max_res = res

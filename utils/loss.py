@@ -191,7 +191,16 @@ class TokenSegLoss(nn.Module):
         self.max_pool = nn.MaxPool2d(4)
 
     def forward(self, logits, labels):
-        return self.criterion(F.interpolate(logits, size=(200, 400), mode='bilinear').sigmoid(), (self.max_pool(labels[:, 0:1, :, :]) != 0).float())
+        # return self.criterion(F.interpolate(logits, size=(200, 400), mode='bilinear').sigmoid(), (self.max_pool(labels[:, 0:1, :, :]) != 0).float())
+        # Downsample labels with max-pooling, then resize logits to match this target size
+        target = (self.max_pool(labels[:, 0:1, :, :]) != 0).float()
+        logits_resized = F.interpolate(
+            logits,
+            size=target.shape[-2:],
+            mode='bilinear',
+            align_corners=False,
+        ).sigmoid()
+        return self.criterion(logits_resized, target)
 
 def test_cross_entropy():
     pred = torch.rand(10,200,33,66)
